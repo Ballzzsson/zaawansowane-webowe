@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Bolesław Biliński</h1>
+        <p class="podtytul">
+            Jestem uczniem zsł
+        </p>
+
+        <nav>
+            <a href="#o-mnie">O mnie</a>
+            <a href="#umiejetnosci">Umiejętności</a>
+            <a href="#kontakt">Kontakt</a>
+            <button type="button" id="przelacznik-motywu">Ciemny motyw</button>
+        </nav>
+    </header>
+
+    <main>
+
+        <section id="o-mnie">
+            <h2>O mnie</h2>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores omnis expedita ratione dolore similique eum quibusdam molestias, mollitia maiores quis, doloremque, facere officia delectus? Tempora, ea? Optio temporibus modi minima?
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit necessitatibus, quasi quo praesentium numquam voluptates est similique sint harum corrupti asperiores, ut cumque atque aliquid quos porro aut exercitationem at.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis aliquid dicta distinctio laborum cum quas maiores doloremque eaque id nemo officia mollitia voluptatibus quisquam eos odit repudiandae vel, perspiciatis eligendi.
+            </p>
+        </section>
+
+        <section id="umiejetnosci">
+            <h2>Umiejętności</h2>
+            <p>Lista z js:</p>
+
+            <ul id="lista-umiejetnosci"></ul>
+        </section>
+
+        <section id="kontakt">
+            <h2>Kontakt</h2>
+            <p>Formularz</p>
+
+            <form id="formularz-kontakt">
+                <div class="pole">
+                    <label for="imie">Imię</label>
+                    <input type="text" id="imie" name="imie" placeholder="Jak masz na imię?">
+                </div>
+
+                <div class="pole">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="adres@example.com">
+                </div>
+
+                <div class="pole">
+                    <label for="temat">Temat</label>
+                    <select id="temat" name="temat">
+                        <option value="">— wybierz —</option>
+                        <option value="wspolpraca">Współpraca</option>
+                        <option value="pytanie">Pytanie</option>
+                        <option value="inne">Inne</option>
+                    </select>
+                </div>
+
+                <div class="pole">
+                    <label for="tresc">Wiadomość</label>
+                    <textarea id="tresc" name="tresc" rows="4"
+                              placeholder="Treść wiadomości"></textarea>
+                </div>
+
+                <button type="submit">Wyślij</button>
+            </form>
+
+            <div id="komunikat"></div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Bolesław Biliński 2026 aplikacje webowe</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
