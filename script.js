@@ -1,84 +1,127 @@
-const technologie = [
-    "HTML",
-    "Css",
-    "Java Script",
-    "SQL",
-    "PHP",
-    "Inkscape"
-];
 
-function wyswietlTechnologie(tablica) {
-    const lista = document.querySelector("#lista-umiejetnosci");
-
-    for (const technologia of tablica) {
-        const pozycja = document.createElement("li");
-        pozycja.textContent = technologia;
-        lista.appendChild(pozycja);
-    }
-}
-
-wyswietlTechnologie(technologie);
+import { umiejetnosci, ADRES_API } from "./dane.js";
+import { budujListe, filtrujPoKategorii, podsumowanie } from "./umiejetnosci.js";
 
 
-const formularzKontaktowy = document.querySelector("#formularz-kontakt");
-const wiadomosc = document.querySelector("#komunikat");
+
+const listaEl = document.querySelector("#lista-umiejetnosci");
+const podsumowanieEl = document.querySelector("#podsumowanie");
+const filtryEl = document.querySelector("#filtry");
 
 
-function wyswietlWiadomosc(tekst, typ) {
+const pokazUmiejetnosci = (kategoria = "wszystkie") => {
+    const wybrane = filtrujPoKategorii(umiejetnosci, kategoria);
 
-    wiadomosc.textContent = tekst;
-    wiadomosc.classList.remove("blad", "sukces");
-    wiadomosc.classList.add(typ);
-}
+    listaEl.innerHTML = budujListe(wybrane);
+    podsumowanieEl.textContent = podsumowanie(wybrane);
+};
 
-formularzKontaktowy.addEventListener("submit", function (zdarzenie) {
+filtryEl.addEventListener("click", (event) => {
+    const przycisk = event.target.closest("button");
 
-    zdarzenie.preventDefault();
-
-    const osoba = document.querySelector("#imie").value.trim();
-    const adres = document.querySelector("#email").value.trim();
-    const wybranyTemat = document.querySelector("#temat").value;
-    const zawartosc = document.querySelector("#tresc").value.trim();
-
-    if (osoba === "") {
-        wyswietlWiadomosc("Podaj imię.", "blad");
+    if (!przycisk) {
         return;
     }
 
-    if (adres === "") {
-        wyswietlWiadomosc("Podaj adres e-mail.", "blad");
+    filtryEl.querySelectorAll("button").forEach(b => b.classList.remove("aktywny"));
+    przycisk.classList.add("aktywny");
+
+    pokazUmiejetnosci(przycisk.dataset.kategoria);
+});
+
+pokazUmiejetnosci();
+
+
+
+const formularz = document.querySelector("#formularz-kontakt");
+const komunikat = document.querySelector("#komunikat");
+
+
+const pokazKomunikat = (tresc, rodzaj) => {
+    komunikat.textContent = tresc;
+    komunikat.classList.remove("blad", "sukces");
+    komunikat.classList.add(rodzaj);
+};
+
+formularz.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const dane = Object.fromEntries(new FormData(formularz));
+    const { imie, email, temat } = dane;
+
+    if (imie.trim() === "") {
+        pokazKomunikat("Podaj imię.", "blad");
         return;
     }
 
-    if (wybranyTemat === "") {
-        wyswietlWiadomosc("Wybierz temat wiadomości.", "blad");
+    if (email.trim() === "") {
+        pokazKomunikat("Podaj adres e-mail.", "blad");
         return;
     }
 
-    wyswietlWiadomosc(
-        "Dziękuję, " + osoba + ". Wiadomość na temat „" + wybranyTemat + "” została przyjęta.",
+    if (temat === "") {
+        pokazKomunikat("Wybierz temat wiadomości.", "blad");
+        return;
+    }
+
+    pokazKomunikat(
+        `Dziękuję, ${imie.trim()}. Wiadomość na temat „${temat}” została przyjęta.`,
         "sukces"
     );
 
-    console.log("Dane z formularza:", {
-        osoba: osoba,
-        adres: adres,
-        wybranyTemat: wybranyTemat,
-        zawartosc: zawartosc
-    });
-
-    formularzKontaktowy.reset();
+    console.log("Dane z formularza:", dane);
+    formularz.reset();
 });
 
 
-const zmianaMotywu = document.querySelector("#przelacznik-motywu");
+const inspiracjeEl = document.querySelector("#inspiracje");
 
-zmianaMotywu.addEventListener("click", function () {
-    const ciemnyTryb = document.body.classList.toggle("ciemny");
 
-    if (ciemnyTryb) {
-        zmianaMotywu.textContent = "Jasny motyw";
-    } else {
-        zmianaMotywu.textContent = "Ciemny motyw";
+const pobierzUzytkownikow = async (adres) => {
+    const odpowiedz = await fetch(adres);
+
+    if (!odpowiedz.ok) {
+        throw new Error(`Serwer odpowiedział: ${odpowiedz.status}`);
     }
+
+    return odpowiedz.json();
+};
+
+const pokazInspiracje = async () => {
+    inspiracjeEl.innerHTML = `<p class="ladowanie">Ładowanie…</p>`;
+
+    try {
+        const uzytkownicy = await pobierzUzytkownikow(ADRES_API);
+
+        inspiracjeEl.innerHTML = `
+            <ul class="osoby">
+                ${uzytkownicy
+                    .map(({ name, address }) => `
+                        <li>
+                            <strong>${name}</strong>
+                            <span>${address.city}</span>
+                        </li>
+                    `)
+                    .join("")}
+            </ul>
+        `;
+    } catch (blad) {
+        console.error("Nie udało się pobrać danych:", blad.message);
+        inspiracjeEl.innerHTML = `
+            <p class="blad">
+                Nie udało się pobrać danych z serwera. Sprawdź połączenie
+                z internetem i odśwież stronę.
+            </p>
+        `;
+    }
+};
+
+pokazInspiracje();
+
+
+const przycisk = document.querySelector("#przelacznik-motywu");
+
+przycisk.addEventListener("click", () => {
+    const jestCiemny = document.body.classList.toggle("ciemny");
+    przycisk.textContent = jestCiemny ? "Jasny motyw" : "Ciemny motyw";
 });
