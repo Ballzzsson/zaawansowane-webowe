@@ -1,0 +1,19 @@
+{
+  "name": "mb06-katalog-gier",
+  "version": "1.0.0",
+  "description": "Serwer katalogu gier planszowych",
+  "main": "serwer.js",
+  "type": "module",
+  "scripts": {
+    "start": "node serwer.js",
+    "dev": "nodemon serwer.js"
+  },
+  "author": "Jan Kowalski",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
