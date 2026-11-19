@@ -1,0 +1,14 @@
+[
+  {
+    "tekst": "buy milk",
+    "zrobione": false
+  },
+  {
+    "tekst": "go slip",
+    "zrobione": true
+  },
+  {
+    "tekst": "123",
+    "zrobione": true
+  }
+]
